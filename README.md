@@ -210,6 +210,15 @@ kubeflow-mcp serve \
 
 `--mode progressive` exposes 3 meta-tools (~85 tokens) for hierarchical discovery. `--mode semantic` exposes 2 meta-tools (~69 tokens) using embedding search. Both reduce token consumption significantly for agent workflows.
 
+`--persona` controls which tools are exposed. Each persona includes the tools of the one above it:
+
+| Persona | Use it for |
+|---|---|
+| `readonly` (default) | Planning, browsing jobs and runtimes, reading logs and events |
+| `data-scientist` | Submitting fine-tuning and custom training, waiting for jobs, deleting MCP-created jobs |
+| `ml-engineer` | Container training, suspending/resuming jobs, inspecting CRDs and the controller |
+| `platform-admin` | All tools, including creating, patching and deleting runtimes |
+
 <details>
 <summary> HTTP Authentication</summary>
 
