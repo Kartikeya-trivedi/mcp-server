@@ -40,6 +40,43 @@ cd mcp-server
 make install-dev
 ```
 
+### Prerequisites
+
+Before starting the Kubeflow MCP Server, make sure the following requirements
+are available:
+
+- Python 3.10, 3.11, or 3.12
+- A running Kubernetes cluster
+- `kubectl` installed and available in `PATH`
+- A kubeconfig configured for the target cluster
+- Kubeflow Trainer installed in the cluster
+- Kubeflow Trainer CRDs and at least one `ClusterTrainingRuntime`
+- Kubernetes permissions for the namespace you train in, plus cluster-scoped
+  read access for planning and runtime discovery (see
+  [RBAC Configuration](ARCHITECTURE.md#rbac-configuration))
+
+Verify the connection and your permissions in the target namespace. Each
+`can-i` command should print `yes`:
+
+```bash
+kubectl config current-context
+kubectl auth can-i create trainjobs.trainer.kubeflow.org -n <namespace>
+kubectl auth can-i list pods -n <namespace>
+kubectl auth can-i get pods --subresource=log -n <namespace>
+```
+
+The checks below need cluster-scoped read access, so they can return
+`Forbidden` for a namespace-scoped user even when Kubeflow Trainer is installed
+correctly. Without that access, the tools that read these resources
+(`get_cluster_resources`, `check_compatibility`, `list_runtimes`) fail; tools
+that work on jobs in your namespace are unaffected.
+
+```bash
+kubectl get nodes
+kubectl get crd trainjobs.trainer.kubeflow.org
+kubectl get clustertrainingruntimes
+```
+
 ### Run the server
 
 ```bash
