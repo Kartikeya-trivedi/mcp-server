@@ -97,3 +97,10 @@ exclude_lines = [
     "pass",
     "raise ImportError",
 ]
+
+[tool.uv]
+# Security overrides - Review periodically and remove if parent constraints allow natural upgrade
+override-dependencies = [
+    # mcp==2.2.0 - Added 2026-10-17 for security fix - https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-84m7-p3x7-pcfv
+    "mcp==2.2.0",
+]
